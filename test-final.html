@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Test Final WERDEN | Claudia Toth</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(to bottom, #f0fdf4, #ffffff); min-height: 100vh; }
+        .header { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 20px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 1000; }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo-icon { font-size: 28px; }
+        .logo-text h1 { font-size: 24px; font-weight: bold; margin: 0; }
+        .logo-text p { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0; opacity: 0.9; }
+        .back-link { display: inline-block; background: white; color: #10b981; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; margin: 20px; transition: all 0.3s ease; }
+        .back-link:hover { background: #f0fdf4; }
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+        .intro-section { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); text-align: center; margin-bottom: 30px; }
+        .intro-section h1 { color: #10b981; font-size: 32px; margin-bottom: 20px; }
+        .intro-section p { color: #6b7280; font-size: 16px; line-height: 1.6; margin-bottom: 15px; }
+        .stats { display: flex; gap: 20px; justify-content: center; margin: 30px 0; flex-wrap: wrap; }
+        .stat { background: #f0fdf4; padding: 15px 25px; border-radius: 8px; border-left: 4px solid #10b981; }
+        .stat-number { font-size: 24px; font-weight: bold; color: #10b981; }
+        .stat-label { font-size: 14px; color: #6b7280; }
+        .start-btn { background: #10b981; color: white; padding: 15px 40px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+        .start-btn:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3); }
+        .quiz-section { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); display: none; }
+        .progress-bar { background: #e5e7eb; height: 8px; border-radius: 4px; margin-bottom: 30px; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, #10b981, #059669); height: 100%; width: 0%; transition: width 0.3s ease; }
+        .question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .question-number { font-size: 14px; color: #6b7280; }
+        .level-badge { display: inline-block; background: #10b981; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .question-text { font-size: 20px; font-weight: bold; color: #1f2937; margin-bottom: 25px; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option { background: #f9fafb; border: 2px solid #e5e7eb; padding: 15px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 12px; }
+        .option:hover { border-color: #10b981; background: #f0fdf4; }
+        .option.selected { border-color: #10b981; background: #d1fae5; }
+        .option.correct { border-color: #10b981; background: #d1fae5; }
+        .option.incorrect { border-color: #ef4444; background: #fee2e2; }
+        .option input[type="radio"] { width: 20px; height: 20px; cursor: pointer; }
+        .btn-group { display: flex; gap: 15px; margin-top: 30px; justify-content: flex-end; }
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+        .btn-primary { background: #10b981; color: white; }
+        .btn-primary:hover { background: #059669; }
+        .btn-secondary { background: white; color: #10b981; border: 2px solid #10b981; }
+        .btn-secondary:hover { background: #f0fdf4; }
+        .results-section { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); display: none; text-align: center; }
+        .score-display { font-size: 64px; font-weight: bold; color: #10b981; margin: 30px 0; }
+        .feedback { font-size: 20px; color: #1f2937; margin-bottom: 30px; }
+        .level-results { display: flex; gap: 20px; justify-content: center; margin: 30px 0; flex-wrap: wrap; }
+        .level-result { background: #f9fafb; padding: 20px; border-radius: 8px; border-left: 4px solid #10b981; min-width: 150px; }
+        .level-result h4 { color: #10b981; margin-bottom: 10px; }
+        .level-score { font-size: 24px; font-weight: bold; color: #1f2937; }
+        .footer { text-align: center; margin-top: 60px; padding: 20px; color: #6b7280; font-size: 14px; }
+        @media (max-width: 768px) { .header-content { flex-direction: column; gap: 15px; } .container { padding: 0 15px; } .intro-section, .quiz-section, .results-section { padding: 20px; } .stats { flex-direction: column; gap: 10px; } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">ʚଓ</span>
+                <div class="logo-text">
+                    <h1>Claudia Toth</h1>
+                    <p>Curs autorizat de limba germana</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="index.html" class="back-link">← Înapoi la lecție</a>
+
+    <div class="container">
+        <!-- INTRO SECTION -->
+        <div class="intro-section" id="introSection">
+            <h1>🏆 Test Final: Verbul WERDEN</h1>
+            <p>Testează-ți cunoștințele acumulate despre verbul WERDEN! Acest test acoperă toate nivelurile de la A1 la B1.</p>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">20</div>
+                    <div class="stat-label">Întrebări</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">10 min</div>
+                    <div class="stat-label">Timp estimat</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">A1-B1</div>
+                    <div class="stat-label">Niveluri</div>
+                </div>
+            </div>
+
+            <p style="margin-bottom: 30px;"><strong>Instrucțiuni:</strong> Alege răspunsul corect pentru fiecare întrebare. La final vei primi un punctaj detaliat pe niveluri.</p>
+            
+            <button class="start-btn" onclick="startQuiz()">🚀 Începe testul</button>
+        </div>
+
+        <!-- QUIZ SECTION -->
+        <div class="quiz-section" id="quizSection">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+
+            <div class="question-header">
+                <span class="question-number" id="questionNumber">Întrebarea 1 din 20</span>
+                <span class="level-badge" id="levelBadge">NIVEL A1</span>
+            </div>
+
+            <div class="question-text" id="questionText"></div>
+
+            <div class="options" id="optionsContainer"></div>
+
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" style="display: none;">← Anterior</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Următoarea →</button>
+            </div>
+        </div>
+
+        <!-- RESULTS SECTION -->
+        <div class="results-section" id="resultsSection">
+            <h1>🎉 Test Finalizat!</h1>
+            <div class="score-display" id="scoreDisplay"></div>
+            <div class="feedback" id="feedbackText"></div>
+
+            <div class="level-results" id="levelResults"></div>
+
+            <div class="btn-group" style="justify-content: center; margin-top: 40px;">
+                <button class="btn btn-secondary" onclick="window.location.href='index.html'">📚 Revizuiește lecția</button>
+                <button class="btn btn-primary" onclick="restartQuiz()">↻ Încearcă din nou</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Claudia Toth - Curs autorizat de limba germană</p>
+    </div>
+
+    <script>
+        const questions = [
+            // A1 - Prezent (10 întrebări)
+            { level: 'A1', question: 'Ich __________ Lehrer.', options: ['werde', 'wird', 'wirst', 'werden'], correct: 0 },
+            { level: 'A1', question: 'Du __________ 18 Jahre alt.', options: ['werde', 'wird', 'wirst', 'werden'], correct: 2 },
+            { level: 'A1', question: 'Er __________ müde.', options: ['werde', 'wird', 'wirst', 'werdet'], correct: 1 },
+            { level: 'A1', question: 'Wir __________ Freunde.', options: ['werde', 'wird', 'werden', 'werdet'], correct: 2 },
+            { level: 'A1', question: 'Ihr __________ Studenten.', options: ['werde', 'werden', 'werdet', 'wirst'], correct: 2 },
+            { level: 'A1', question: 'Sie __________ glücklich. (ei)', options: ['wird', 'werden', 'werdet', 'wirst'], correct: 1 },
+            { level: 'A1', question: 'Es __________ kalt.', options: ['werde', 'wird', 'wirst', 'werden'], correct: 1 },
+            { level: 'A1', question: 'Maria __________ Ärztin.', options: ['werde', 'wird', 'wirst', 'werden'], correct: 1 },
+            { level: 'A1', question: 'Die Kinder __________ groß.', options: ['wird', 'werden', 'werdet', 'wirst'], correct: 1 },
+            { level: 'A1', question: 'Sie __________ nervös. (dumneavoastră)', options: ['wird', 'werden', 'werdet', 'wirst'], correct: 1 },
+            
+            // A1-A2 - Präteritum (4 întrebări)
+            { level: 'A2', question: 'Gestern __________ es warm.', options: ['wird', 'wurde', 'wurden', 'wirst'], correct: 1 },
+            { level: 'A2', question: 'Er __________ 20 Jahre alt.', options: ['wird', 'wurde', 'wurden', 'wurdest'], correct: 1 },
+            { level: 'A2', question: 'Wir __________ Lehrer.', options: ['wurde', 'wurden', 'wurdet', 'wurdest'], correct: 1 },
+            { level: 'A2', question: 'Du __________ müde.', options: ['wurde', 'wurden', 'wurdet', 'wurdest'], correct: 3 },
+            
+            // A2 - Futur I (3 întrebări)
+            { level: 'A2', question: 'Ich __________ morgen kommen.', options: ['werde', 'wurde', 'bin geworden', 'wird'], correct: 0 },
+            { level: 'A2', question: 'Er __________ viel arbeiten.', options: ['werde', 'wird', 'wurde', 'werden'], correct: 1 },
+            { level: 'A2', question: 'Wir __________ nach Berlin reisen.', options: ['werde', 'wird', 'wurden', 'werden'], correct: 3 },
+            
+            // B1 - Passiv (3 întrebări)
+            { level: 'B1', question: 'Das Haus __________ gebaut. (Prezent Pasiv)', options: ['wurde', 'wird', 'worden', 'werden'], correct: 1 },
+            { level: 'B1', question: 'Der Brief __________ geschrieben. (Prezent Pasiv)', options: ['wurde', 'wird', 'worden', 'werden'], correct: 1 },
+            { level: 'B1', question: 'Das Auto __________ repariert. (Prezent Pasiv)', options: ['wurde', 'wird', 'worden', 'werden'], correct: 1 }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = [];
+        let score = 0;
+
+        function startQuiz() {
+            document.getElementById('introSection').style.display = 'none';
+            document.getElementById('quizSection').style.display = 'block';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('questionNumber').textContent = `Întrebarea ${currentQuestion + 1} din ${questions.length}`;
+            document.getElementById('levelBadge').textContent = `NIVEL ${q.level}`;
+            document.getElementById('questionText').textContent = q.question;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            q.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                if (userAnswers[currentQuestion] === index) {
+                    optionDiv.classList.add('selected');
+                }
+                optionDiv.onclick = () => selectOption(index);
+                optionDiv.innerHTML = `
+                    <input type="radio" name="answer" value="${index}" ${userAnswers[currentQuestion] === index ? 'checked' : ''}>
+                    <span>${option}</span>
+                `;
+                optionsContainer.appendChild(optionDiv);
+            });
+
+            // Update progress bar
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+
+            // Show/hide buttons
+            document.getElementById('prevBtn').style.display = currentQuestion > 0 ? 'block' : 'none';
+            document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'Finalizează testul' : 'Următoarea →';
+        }
+
+        function selectOption(index) {
+            userAnswers[currentQuestion] = index;
+            showQuestion();
+        }
+
+        function nextQuestion() {
+            if (userAnswers[currentQuestion] === undefined) {
+                alert('Te rog selectează un răspuns înainte de a continua!');
+                return;
+            }
+
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+
+        function finishQuiz() {
+            // Calculate score
+            score = 0;
+            const levelScores = { A1: { correct: 0, total: 0 }, A2: { correct: 0, total: 0 }, B1: { correct: 0, total: 0 } };
+
+            questions.forEach((q, index) => {
+                levelScores[q.level].total++;
+                if (userAnswers[index] === q.correct) {
+                    score++;
+                    levelScores[q.level].correct++;
+                }
+            });
+
+            const percentage = Math.round((score / questions.length) * 100);
+
+            // Show results
+            document.getElementById('quizSection').style.display = 'none';
+            document.getElementById('resultsSection').style.display = 'block';
+            document.getElementById('scoreDisplay').textContent = `${score}/${questions.length}`;
+
+            // Feedback based on score
+            let feedback = '';
+            if (percentage >= 90) {
+                feedback = '🎉 Excelent! Ai stăpânit perfect verbul WERDEN!';
+            } else if (percentage >= 75) {
+                feedback = '👏 Foarte bine! Cunoști bine verbul WERDEN!';
+            } else if (percentage >= 60) {
+                feedback = '👍 Bine! Mai revizuiește câteva secțiuni.';
+            } else {
+                feedback = '📚 Revizuiește lecția și încearcă din nou!';
+            }
+            document.getElementById('feedbackText').textContent = feedback;
+
+            // Level results
+            const levelResultsDiv = document.getElementById('levelResults');
+            levelResultsDiv.innerHTML = '';
+            Object.keys(levelScores).forEach(level => {
+                const ls = levelScores[level];
+                const levelDiv = document.createElement('div');
+                levelDiv.className = 'level-result';
+                levelDiv.innerHTML = `
+                    <h4>Nivel ${level}</h4>
+                    <div class="level-score">${ls.correct}/${ls.total}</div>
+                `;
+                levelResultsDiv.appendChild(levelDiv);
+            });
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = [];
+            score = 0;
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('introSection').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
