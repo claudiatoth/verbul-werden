@@ -2,7 +2,9 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
     <title>Verbul WERDEN - Lectie Interactiva | Claudia Toth</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -37,7 +39,12 @@
         .dropdown-content.active { max-height: 2000px; padding: 20px; }
         .table-container { overflow-x: auto; margin: 20px 0; position: relative; }
         .table-container::after { content: "← Scroll →"; display: none; text-align: center; color: #6b7280; font-size: 12px; margin-top: 10px; }
-        @media (max-width: 768px) { .table-container::after { display: block; } }
+        @media (max-width: 768px) {.mini-flashcard { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s; cursor: pointer; }
+        .mini-flashcard.flipped { transform: rotateY(180deg); }
+        .mini-front, .mini-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .mini-front { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; }
+        .mini-back { background: white; border: 3px solid #10b981; transform: rotateY(180deg); }
+        .table-container::after { display: block; } }
         table { width: 100%; border-collapse: collapse; background: white; min-width: 500px; }
         table thead { background: #10b981; color: white; }
         table th, table td { padding: 12px; text-align: left; border: 1px solid #e5e7eb; }
@@ -302,7 +309,72 @@
             </div>
         </div>
     </div></div>
+        </div>
         
+        <!-- FLASHCARDS PREVIEW -->
+        <div class="section" style="text-align: center; background: white; padding: 40px; border: 3px solid #10b981;">
+            <h2 style="color: #10b981; margin-bottom: 20px;">🎴 Învață cu Flashcards Interactive!</h2>
+            <p style="font-size: 16px; color: #6b7280; margin-bottom: 30px;">
+                36 de flashcards organizate pe niveluri pentru a consolida cunoștințele!
+            </p>
+            
+            <!-- Mini preview cu 3 carduri -->
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 30px;">
+                
+                <!-- Card 1 -->
+                <div style="width: 200px; height: 140px; perspective: 1000px;">
+                    <div class="mini-flashcard" onclick="flipMiniCard(this)">
+                        <div class="mini-front">
+                            <div style="font-size: 12px; opacity: 0.8; margin-bottom: 10px;">GERMANĂ</div>
+                            <div style="font-size: 24px; font-weight: bold;">ich werde</div>
+                        </div>
+                        <div class="mini-back">
+                            <div style="font-size: 12px; opacity: 0.8; margin-bottom: 10px;">ROMÂNĂ</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #10b981;">eu devin</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 2 -->
+                <div style="width: 200px; height: 140px; perspective: 1000px;">
+                    <div class="mini-flashcard" onclick="flipMiniCard(this)">
+                        <div class="mini-front">
+                            <div style="font-size: 12px; opacity: 0.8; margin-bottom: 10px;">GERMANĂ</div>
+                            <div style="font-size: 24px; font-weight: bold;">du wirst</div>
+                        </div>
+                        <div class="mini-back">
+                            <div style="font-size: 12px; opacity: 0.8; margin-bottom: 10px;">ROMÂNĂ</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #10b981;">tu devii</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 3 -->
+                <div style="width: 200px; height: 140px; perspective: 1000px;">
+                    <div class="mini-flashcard" onclick="flipMiniCard(this)">
+                        <div class="mini-front">
+                            <div style="font-size: 12px; opacity: 0.8; margin-bottom: 10px;">GERMANĂ</div>
+                            <div style="font-size: 24px; font-weight: bold;">er wird</div>
+                        </div>
+                        <div class="mini-back">
+                            <div style="font-size: 12px; opacity: 0.8; margin-bottom: 10px;">ROMÂNĂ</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #10b981;">el devine</div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <p style="font-size: 14px; color: #6b7280; margin-bottom: 20px;">
+                ✨ Click pe carduri pentru a vedea traducerea!
+            </p>
+            
+            <a href="flashcards.html" class="btn btn-primary" style="background: #10b981; color: white; padding: 15px 40px; text-decoration: none; display: inline-block; border-radius: 8px; font-weight: bold; font-size: 16px; transition: all 0.3s ease;">
+                🎴 Explorează toate cele 36 flashcards →
+            </a>
+        </div>
+        
+        <!-- SONDAJ TYPEFORM -->
         <!-- SONDAJ TYPEFORM -->
         <div class="section" style="text-align: center; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; margin-top: 40px;">
             <h2 style="color: white; border-bottom: 3px solid white;">📊 Feedback - Cum ți s-a părut lecția?</h2>
