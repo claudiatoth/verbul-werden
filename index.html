@@ -204,9 +204,9 @@
                 </div>
             </div>
             <div class="dropdown">
-                <div class="dropdown-header" onclick="toggleDropdown(this)"><span>EXERCITIUL 2: Traduce in germana <span class="level-tag">NIVEL A1</span></span><span class="dropdown-arrow">▼</span></div>
+                <div class="dropdown-header" onclick="toggleDropdown(this)"><span>EXERCITIUL 2: Tradu in germana <span class="level-tag">NIVEL A1</span></span><span class="dropdown-arrow">▼</span></div>
                 <div class="dropdown-content">
-                    <p><strong>Traduce urmatoarele propozitii in limba germana:</strong></p>
+                    <p><strong>Tradu urmatoarele propozitii in limba germana:</strong></p>
                     <div class="question"><label>1. Eu devin profesor.</label><input type="text" id="ex2_q1"><div class="answer" id="ex2_a1">Raspuns: <strong>Ich werde Lehrer.</strong></div></div>
                     <div class="question"><label>2. Tu devii doctor.</label><input type="text" id="ex2_q2"><div class="answer" id="ex2_a2">Raspuns: <strong>Du wirst Arzt.</strong></div></div>
                     <div class="question"><label>3. El devine avocat.</label><input type="text" id="ex2_q3"><div class="answer" id="ex2_a3">Raspuns: <strong>Er wird Anwalt.</strong></div></div>
@@ -474,18 +474,108 @@ function playAudio(f, buttonElement) {
         function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
         window.addEventListener('scroll', function() { const s = document.getElementById('scrollTop'); if (window.scrollY > 300) { s.classList.add('show'); } else { s.classList.remove('show'); } });
         function verifyAnswers(id, n) {
-            let f = true;
-            for (let i = 1; i <= n; i++) {
-                const inp = document.getElementById(`${id}_q${i}`);
-                const ans = document.getElementById(`${id}_a${i}`);
-                if (!inp.value.trim()) f = false;
-                ans.classList.add('show');
-            }
-            const fb = document.getElementById(`${id}_feedback`);
-            fb.classList.add('show');
-            if (f) { fb.className = 'feedback show success'; fb.textContent = '✓ Toate raspunsurile completate! <br><small>Scroll în sus pentru a vedea corectitudinea fiecărui răspuns.</small>'; }
-            else { fb.className = 'feedback show error'; fb.textContent = '⚠ Completeaza toate campurile.'; }
+    // Verifică dacă toate câmpurile sunt completate
+    let allFilled = true;
+    for (let i = 1; i <= n; i++) {
+        const inp = document.getElementById(`${id}_q${i}`);
+        if (!inp.value.trim()) {
+            allFilled = false;
+            break;
         }
+    }
+    
+    if (!allFilled) {
+        const fb = document.getElementById(`${id}_feedback`);
+        fb.classList.add('show');
+        fb.className = 'feedback show error';
+        fb.textContent = '⚠ Completează toate câmpurile înainte de verificare!';
+        return;
+    }
+    
+    // AUTOCORRECT - Verifică fiecare răspuns
+    let correctCount = 0;
+    
+    for (let i = 1; i <= n; i++) {
+        const inp = document.getElementById(`${id}_q${i}`);
+        const ans = document.getElementById(`${id}_a${i}`);
+        const userAnswer = inp.value.trim().toLowerCase();
+        
+        // Extrage răspunsul corect din HTML-ul existent
+        const answerHTML = ans.innerHTML;
+        let correctAnswer = '';
+        
+        // Caută textul între <strong> tags
+        const strongMatch = answerHTML.match(/<strong>(.*?)<\/strong>/i);
+        if (strongMatch) {
+            correctAnswer = strongMatch[1].trim().toLowerCase();
+        } else {
+            // Fallback: ia tot textul după "Răspuns:" sau "Raspuns:"
+            correctAnswer = answerHTML.replace(/Răspuns:|Raspuns:/i, '').replace(/<[^>]*>/g, '').trim().toLowerCase();
+        }
+        
+        // Compară răspunsurile (elimină spații extra și ignoră majuscule)
+        const userClean = userAnswer.replace(/\s+/g, ' ').trim();
+        const correctClean = correctAnswer.replace(/\s+/g, ' ').trim();
+        
+        if (userClean === correctClean) {
+            // CORECT ✓
+            correctCount++;
+            ans.classList.add('show');
+            ans.style.background = '#d1fae5';
+            ans.style.borderLeft = '4px solid #10b981';
+            ans.style.padding = '10px';
+            ans.style.borderRadius = '5px';
+            ans.style.marginTop = '8px';
+            ans.innerHTML = `<span style="color: #065f46;">✓ <strong>Corect!</strong></span> ${correctAnswer}`;
+            inp.style.borderColor = '#10b981';
+            inp.style.background = '#f0fdf4';
+        } else {
+            // GREȘIT ✗
+            ans.classList.add('show');
+            ans.style.background = '#fee2e2';
+            ans.style.borderLeft = '4px solid #ef4444';
+            ans.style.padding = '10px';
+            ans.style.borderRadius = '5px';
+            ans.style.marginTop = '8px';
+            ans.innerHTML = `<span style="color: #991b1b;">✗ <strong>Greșit</strong></span><br>
+                <small>Ai scris: <em style="color: #dc2626;">${userAnswer || '(nimic)'}</em></small><br>
+                Corect: <strong style="color: #065f46;">${correctAnswer}</strong>`;
+            inp.style.borderColor = '#ef4444';
+            inp.style.background = '#fef2f2';
+        }
+    }
+    
+    // FEEDBACK GENERAL cu punctaj
+    const fb = document.getElementById(`${id}_feedback`);
+    fb.classList.add('show');
+    const percentage = Math.round((correctCount / n) * 100);
+    
+    if (percentage === 100) {
+        fb.className = 'feedback show success';
+        fb.innerHTML = `<strong>🎉 Perfect! ${correctCount}/${n} (${percentage}%)</strong><br>Toate răspunsurile sunt corecte!`;
+        fb.style.background = '#d1fae5';
+        fb.style.color = '#065f46';
+        fb.style.border = '2px solid #10b981';
+    } else if (percentage >= 70) {
+        fb.className = 'feedback show success';
+        fb.innerHTML = `<strong>👍 Bine! ${correctCount}/${n} (${percentage}%)</strong><br><small>Verifică răspunsurile greșite (marcate cu roșu) mai sus.</small>`;
+        fb.style.background = '#fef3c7';
+        fb.style.color = '#854d0e';
+        fb.style.border = '2px solid #f59e0b';
+    } else {
+        fb.className = 'feedback show error';
+        fb.innerHTML = `<strong>📚 Punctaj: ${correctCount}/${n} (${percentage}%)</strong><br><small>Mai exersează! Verifică răspunsurile greșite (roșu) mai sus.</small>`;
+        fb.style.background = '#fee2e2';
+        fb.style.color = '#991b1b';
+        fb.style.border = '2px solid #ef4444';
+    }
+    
+    fb.style.padding = '15px';
+    fb.style.borderRadius = '8px';
+    fb.style.marginTop = '20px';
+    fb.style.textAlign = 'center';
+    fb.style.fontWeight = 'bold';
+}
         function resetExercise(id, n) {
             for (let i = 1; i <= n; i++) {
                 document.getElementById(`${id}_q${i}`).value = '';
