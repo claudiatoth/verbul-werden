@@ -639,13 +639,28 @@ function playAudio(f, buttonElement) {
     fb.style.fontWeight = 'bold';
     fb.style.fontSize = '14px';
 }
-        function resetExercise(id, n) {
-            for (let i = 1; i <= n; i++) {
-                document.getElementById(`${id}_q${i}`).value = '';
-                document.getElementById(`${id}_a${i}`).classList.remove('show');
-            }
-            document.getElementById(`${id}_feedback`).classList.remove('show');
-        }
+     function resetExercise(id, n) {
+    for (let i = 1; i <= n; i++) {
+        const inp = document.getElementById(`${id}_q${i}`);
+        const ans = document.getElementById(`${id}_a${i}`);
+        
+        // Șterge valoarea
+        inp.value = '';
+        
+        // Ascunde răspunsul
+        ans.classList.remove('show');
+        ans.style.display = 'none';
+        
+        // Resetează stilurile input-ului
+        inp.style.borderColor = '#e5e7eb';
+        inp.style.background = 'white';
+    }
+    
+    // Ascunde feedback-ul
+    const fb = document.getElementById(`${id}_feedback`);
+    fb.classList.remove('show');
+    fb.style.display = 'none';
+}   
     </script>
 </body>
 </html>
