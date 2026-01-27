@@ -639,7 +639,10 @@ if (strongMatch) {
     fb.style.textAlign = 'center';
     fb.style.fontWeight = 'bold';
     fb.style.fontSize = '14px';
-}
+    fb.style.position = 'sticky';
+    fb.style.top = '80px';
+    fb.style.zIndex = '100';
+    }
      function resetExercise(id, n) {
     for (let i = 1; i <= n; i++) {
         const inp = document.getElementById(`${id}_q${i}`);
