@@ -565,18 +565,21 @@ function playAudio(f, buttonElement) {
         
         // Extrage răspunsul corect din HTML
         const answerHTML = ans.innerHTML;
-        let correctAnswer = '';
-        
-        const strongMatch = answerHTML.match(/<strong>(.*?)<\/strong>/i);
-        if (strongMatch) {
-            correctAnswer = strongMatch[1].trim().toLowerCase();
-        } else {
-            correctAnswer = answerHTML.replace(/Răspuns:|Raspuns:/i, '').replace(/<[^>]*>/g, '').trim().toLowerCase();
+let correctAnswerOriginal = '';  // ← Păstrează versiunea originală cu majuscule!
+let correctAnswerLower = '';     // ← Pentru comparare
+
+const strongMatch = answerHTML.match(/<strong>(.*?)<\/strong>/i);
+if (strongMatch) {
+    correctAnswerOriginal = strongMatch[1].trim();
+    correctAnswerLower = correctAnswerOriginal.toLowerCase();
+} else {
+    correctAnswerOriginal = answerHTML.replace(/Răspuns:|Raspuns:/i, '').replace(/<[^>]*>/g, '').trim();
+    correctAnswerLower = correctAnswerOriginal.toLowerCase();
         }
         
         // Compară răspunsurile
         const userClean = userAnswer.replace(/\s+/g, ' ').trim();
-        const correctClean = correctAnswer.replace(/\s+/g, ' ').trim();
+        const correctClean = correctAnswerLower.replace(/\s+/g, ' ').trim();
         
         if (userClean === correctClean) {
             // ✅ CORECT - NU afișa nimic, doar colorează verde
@@ -596,7 +599,7 @@ function playAudio(f, buttonElement) {
             ans.style.fontSize = '14px';
             ans.innerHTML = `<span style="color: #991b1b;">✗ Greșit</span><br>
                 <small style="color: #6b7280;">Ai scris: <em style="color: #dc2626;">${userAnswer || '(nimic)'}</em></small><br>
-                <small style="color: #065f46;">Corect: <strong>${correctAnswer}</strong></small>`;
+                <small style="color: #065f46;">Corect: <strong>${correctAnswerOriginal}</strong></small>`;
             inp.style.borderColor = '#ef4444';
             inp.style.background = '#fef2f2';
         }
