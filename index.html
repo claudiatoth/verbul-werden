@@ -550,6 +550,8 @@ function playAudio(f, buttonElement) {
         fb.classList.add('show');
         fb.className = 'feedback show error';
         fb.textContent = '⚠ Completează toate câmpurile înainte de verificare!';
+        fb.style.padding = '10px';
+        fb.style.marginTop = '15px';
         return;
     }
     
@@ -561,81 +563,81 @@ function playAudio(f, buttonElement) {
         const ans = document.getElementById(`${id}_a${i}`);
         const userAnswer = inp.value.trim().toLowerCase();
         
-        // Extrage răspunsul corect din HTML-ul existent
+        // Extrage răspunsul corect din HTML
         const answerHTML = ans.innerHTML;
         let correctAnswer = '';
         
-        // Caută textul între <strong> tags
         const strongMatch = answerHTML.match(/<strong>(.*?)<\/strong>/i);
         if (strongMatch) {
             correctAnswer = strongMatch[1].trim().toLowerCase();
         } else {
-            // Fallback: ia tot textul după "Răspuns:" sau "Raspuns:"
             correctAnswer = answerHTML.replace(/Răspuns:|Raspuns:/i, '').replace(/<[^>]*>/g, '').trim().toLowerCase();
         }
         
-        // Compară răspunsurile (elimină spații extra și ignoră majuscule)
+        // Compară răspunsurile
         const userClean = userAnswer.replace(/\s+/g, ' ').trim();
         const correctClean = correctAnswer.replace(/\s+/g, ' ').trim();
         
         if (userClean === correctClean) {
-            // CORECT ✓
+            // ✅ CORECT - NU afișa nimic, doar colorează verde
             correctCount++;
-            ans.classList.add('show');
-            ans.style.background = '#d1fae5';
-            ans.style.borderLeft = '4px solid #10b981';
-            ans.style.padding = '10px';
-            ans.style.borderRadius = '5px';
-            ans.style.marginTop = '8px';
-            ans.innerHTML = `<span style="color: #065f46;">✓ <strong>Corect!</strong></span> ${correctAnswer}`;
+            ans.style.display = 'none'; // Ascunde răspunsul
             inp.style.borderColor = '#10b981';
             inp.style.background = '#f0fdf4';
         } else {
-            // GREȘIT ✗
+            // ❌ GREȘIT - Arată sub input
             ans.classList.add('show');
+            ans.style.display = 'block';
             ans.style.background = '#fee2e2';
             ans.style.borderLeft = '4px solid #ef4444';
-            ans.style.padding = '10px';
+            ans.style.padding = '8px 12px';
             ans.style.borderRadius = '5px';
-            ans.style.marginTop = '8px';
-            ans.innerHTML = `<span style="color: #991b1b;">✗ <strong>Greșit</strong></span><br>
-                <small>Ai scris: <em style="color: #dc2626;">${userAnswer || '(nimic)'}</em></small><br>
-                Corect: <strong style="color: #065f46;">${correctAnswer}</strong>`;
+            ans.style.marginTop = '5px';
+            ans.style.fontSize = '14px';
+            ans.innerHTML = `<span style="color: #991b1b;">✗ Greșit</span><br>
+                <small style="color: #6b7280;">Ai scris: <em style="color: #dc2626;">${userAnswer || '(nimic)'}</em></small><br>
+                <small style="color: #065f46;">Corect: <strong>${correctAnswer}</strong></small>`;
             inp.style.borderColor = '#ef4444';
             inp.style.background = '#fef2f2';
         }
     }
     
-    // FEEDBACK GENERAL cu punctaj
+    // FEEDBACK GENERAL COMPACT (la final, nu acoperă nimic)
     const fb = document.getElementById(`${id}_feedback`);
     fb.classList.add('show');
     const percentage = Math.round((correctCount / n) * 100);
     
+    // Scroll smooth la feedback
+    setTimeout(() => {
+        fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
+    
     if (percentage === 100) {
         fb.className = 'feedback show success';
-        fb.innerHTML = `<strong>🎉 Perfect! ${correctCount}/${n} (${percentage}%)</strong><br>Toate răspunsurile sunt corecte!`;
+        fb.innerHTML = `🎉 <strong>Perfect! ${correctCount}/${n}</strong> - Toate răspunsurile corecte!`;
         fb.style.background = '#d1fae5';
         fb.style.color = '#065f46';
         fb.style.border = '2px solid #10b981';
     } else if (percentage >= 70) {
         fb.className = 'feedback show success';
-        fb.innerHTML = `<strong>👍 Bine! ${correctCount}/${n} (${percentage}%)</strong><br><small>Verifică răspunsurile greșite (marcate cu roșu) mai sus.</small>`;
+        fb.innerHTML = `👍 <strong>Bine! ${correctCount}/${n} (${percentage}%)</strong> - Verifică greșelile marcate cu roșu mai sus.`;
         fb.style.background = '#fef3c7';
         fb.style.color = '#854d0e';
         fb.style.border = '2px solid #f59e0b';
     } else {
         fb.className = 'feedback show error';
-        fb.innerHTML = `<strong>📚 Punctaj: ${correctCount}/${n} (${percentage}%)</strong><br><small>Mai exersează! Verifică răspunsurile greșite (roșu) mai sus.</small>`;
+        fb.innerHTML = `📚 <strong>${correctCount}/${n} (${percentage}%)</strong> - Verifică greșelile (roșu) mai sus.`;
         fb.style.background = '#fee2e2';
         fb.style.color = '#991b1b';
         fb.style.border = '2px solid #ef4444';
     }
     
-    fb.style.padding = '15px';
+    fb.style.padding = '12px 15px';
     fb.style.borderRadius = '8px';
     fb.style.marginTop = '20px';
     fb.style.textAlign = 'center';
     fb.style.fontWeight = 'bold';
+    fb.style.fontSize = '14px';
 }
         function resetExercise(id, n) {
             for (let i = 1; i <= n; i++) {
