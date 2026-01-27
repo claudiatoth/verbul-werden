@@ -597,9 +597,7 @@ if (strongMatch) {
             ans.style.borderRadius = '5px';
             ans.style.marginTop = '5px';
             ans.style.fontSize = '14px';
-            ans.innerHTML = `<span style="color: #991b1b;">✗ Greșit</span><br>
-                <small style="color: #6b7280;">Ai scris: <em style="color: #dc2626;">${userAnswer || '(nimic)'}</em></small><br>
-                <small style="color: #065f46;">Corect: <strong>${correctAnswerOriginal}</strong></small>`;
+            ans.innerHTML = `<small style="color: #065f46;">Corect: <strong>${correctAnswerOriginal}</strong></small>`;
             inp.style.borderColor = '#ef4444';
             inp.style.background = '#fef2f2';
         }
